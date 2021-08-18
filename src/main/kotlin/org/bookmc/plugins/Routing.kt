@@ -20,7 +20,7 @@ fun Application.configureRouting() {
             route("/mappings") {
                 mappings()
             }
-            route("/artifact") {
+            route("/{artifact}") {
                 artifact()
             }
         }
