@@ -28,7 +28,7 @@ fun Application.configureRouting() {
             get("/versions") {
                 val versions = index("leather")
 
-                call.respond(VersionResponse(versions.firstOrNull(), versions))
+                call.respond(VersionResponse(true, versions.firstOrNull(), versions))
             }
 
             get("/versions/{mcversion}/{version}/download") {
@@ -44,7 +44,7 @@ fun Application.configureRouting() {
                     ?: versions.getOrNull(versions.indexOf(builtVersion))
                     ?: throw UnknownVersionException(builtVersion)
 
-                call.respondFile(download(indexedVersion))
+                call.respondFile(download(indexedVersion), "$builtVersion.jar")
             }
         }
     }

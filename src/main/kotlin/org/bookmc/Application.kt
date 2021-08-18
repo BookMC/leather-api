@@ -12,8 +12,6 @@ import org.bookmc.plugins.configureSerialization
 import org.bookmc.responses.GenericResponse
 
 fun main() {
-    System.setProperty("io.ktor.development", "true")
-
     embeddedServer(
         Netty,
         port = System.getenv("PORT")?.toIntOrNull() ?: 8080,
