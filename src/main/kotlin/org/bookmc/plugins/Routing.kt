@@ -1,14 +1,13 @@
 package org.bookmc.plugins
 
 import io.ktor.application.*
-import io.ktor.http.*
 import io.ktor.response.*
 import io.ktor.routing.*
-import org.bookmc.exception.UnknownVersionException
-import org.bookmc.responses.GenericResponse
-import org.bookmc.responses.version.VersionResponse
-import org.bookmc.util.download
-import org.bookmc.version.index
+import org.bookmc.plugins.routes.artifact
+import org.bookmc.plugins.routes.mappings
+import org.bookmc.plugins.routes.responses.GenericResponse
+import org.bookmc.plugins.routes.responses.version.VersionResponse
+import org.bookmc.util.version.index
 
 fun Application.configureRouting() {
     routing {
@@ -18,45 +17,11 @@ fun Application.configureRouting() {
 
         // v1
         route("/v1") {
-            route("/versions") {
-                get {
-                    val versions = index("leather")
-                    call.respond(VersionResponse(true, versions.firstOrNull(), versions))
-                }
-
-                get("/{mcversion}") {
-                    val minecraftVersion = call.parameters["mcversion"]!!
-
-                    val versions = index("leather")
-                        .filter { it.endsWith("-$minecraftVersion") }
-                        .map { it.removeSuffix("-$minecraftVersion") }
-
-                    call.respond(VersionResponse(true, versions.firstOrNull(), versions))
-                }
-
-
-                get("/{mcversion}/{version}/download") {
-                    val mcVersion = call.parameters["mcversion"]!!
-                    val version = call.parameters["version"]!!
-
-                    val builtVersion = "$version-$mcVersion"
-
-                    val versions = index("leather")
-
-                    val indexedVersion = version.takeIf { it == "latest" }
-                        ?.let { versions.firstOrNull { it.endsWith("-$mcVersion") } }
-                        ?: versions.getOrNull(versions.indexOf(builtVersion))
-                        ?: throw UnknownVersionException(builtVersion)
-                    val file = download(indexedVersion)
-
-                    call.response.header(
-                        HttpHeaders.ContentDisposition,
-                        ContentDisposition.Attachment
-                            .withParameter(ContentDisposition.Parameters.FileName, file.name)
-                            .toString()
-                    )
-                    call.respondFile(file)
-                }
+            route("/mappings") {
+                mappings()
+            }
+            route("/artifact") {
+                artifact()
             }
         }
     }

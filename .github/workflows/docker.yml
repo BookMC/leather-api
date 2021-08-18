@@ -16,16 +16,16 @@ jobs:
             key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
             restore-keys: |
               ${{ runner.os }}-gradle-
-      - name: Build Leather-API
+      - name: Build Metadata-API
         run: |
           chmod +x ./gradlew
           ./gradlew distTar
           mkdir actions
-          cp ./build/distributions/leather-api-*.tar ./actions/leather-api.tar
+          cp ./build/distributions/metadata-*.tar ./actions/metadata.tar
       - name: Build and push Docker images (latest)
         uses: mr-smithers-excellent/docker-build-push@v4
         with:
-          image: leather-api/leather
+          image: metadata-api/metadata
           tag: latest
           dockerfile: Dockerfile
           registry: docker.pkg.github.com

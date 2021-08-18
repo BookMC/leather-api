@@ -1,4 +1,4 @@
-package org.bookmc.version.data
+package org.bookmc.util.version.data
 
 data class MavenAPIResponse(
     val files: List<File>
