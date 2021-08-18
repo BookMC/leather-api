@@ -2,6 +2,7 @@ package org.bookmc
 
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
+import org.bookmc.plugins.configureCORS
 import org.bookmc.plugins.configureRouting
 import org.bookmc.plugins.configureSerialization
 import org.bookmc.plugins.configureStatusPage
@@ -16,5 +17,6 @@ fun main() {
         configureRouting()
         configureSerialization()
         configureStatusPage()
+        configureCORS()
     }.start(wait = true)
 }

@@ -20,6 +20,6 @@ suspend fun index(artifact: String): List<IndexedArtifact> {
         http.get<MavenAPIResponse>("$API_URL/$group/$artifact")
             .files
             .filter { it.type == "directory" && !it.name.contains("+jdk") }
-            .map { IndexedArtifact(it.name, "$MAVEN_REPO/$group/$artifact/$artifact-${it.name}.jar") }
+            .map { IndexedArtifact(it.name, "$MAVEN_REPO/$group/$artifact/${it.name}/$artifact-${it.name}.jar") }
     }.getOrElse { throw UnknownArtifactException("$group.$artifact") }
 }

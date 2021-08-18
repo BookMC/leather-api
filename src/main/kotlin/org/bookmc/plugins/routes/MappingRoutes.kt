@@ -35,7 +35,7 @@ fun Route.mappings() {
                 ?.let { versions.firstOrNull { it.version.endsWith("-$mcVersion") } }
                 ?: versions.find { it.version == builtVersion }
                 ?: throw UnknownVersionException(builtVersion)
-            val file = download(indexedVersion.url)
+            val file = download(indexedVersion)
 
             call.response.header(
                 HttpHeaders.ContentDisposition,
