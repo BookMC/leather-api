@@ -9,38 +9,25 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/cache@v2
-      - name: Declare some variables
-        id: vars
-        shell: bash
-        run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
         with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
-      - name: Build leather-api
+            path: |
+              ~/.gradle/caches
+              ~/.gradle/wrapper
+            key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+            restore-keys: |
+              ${{ runner.os }}-gradle-
+      - name: Build Leather-API
         run: |
           chmod +x ./gradlew
           ./gradlew distTar
           mkdir actions
           cp ./build/distributions/leather-api-*.tar ./actions/leather-api.tar
-      - name: Build and push Docker images (with commit-id)
-        uses: mr-smithers-excellent/docker-build-push@v4
-        with:
-          image: BookMC/leather
-          tag: ${{ steps.vars.outputs.sha_short }}
-          dockerfile: Dockerfile
-          registry: docker.pkg.github.com
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build and push Docker images (latest)
         uses: mr-smithers-excellent/docker-build-push@v4
         with:
-          image: BookMC/leather
+          image: leather/leather
           tag: latest
           dockerfile: Dockerfile
           registry: docker.pkg.github.com
           username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ secrets.GH_TOKEN }}
