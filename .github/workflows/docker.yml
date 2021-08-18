@@ -25,7 +25,7 @@ jobs:
       - name: Build and push Docker images (latest)
         uses: mr-smithers-excellent/docker-build-push@v4
         with:
-          image: metadata-api/metadata
+          image: metadata/metadata
           tag: latest
           dockerfile: Dockerfile
           registry: docker.pkg.github.com
