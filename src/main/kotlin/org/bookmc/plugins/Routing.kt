@@ -1,6 +1,7 @@
 package org.bookmc.plugins
 
 import io.ktor.application.*
+import io.ktor.http.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import org.bookmc.exception.UnknownVersionException
@@ -17,14 +18,6 @@ fun Application.configureRouting() {
 
         // v1
         route("/v1") {
-            get {
-                call.respond(GenericResponse(true, null))
-            }
-
-            get("/") {
-                call.respond(GenericResponse(true, null))
-            }
-
             get("/versions") {
                 val versions = index("leather")
 
@@ -43,8 +36,15 @@ fun Application.configureRouting() {
                     ?.let { versions.firstOrNull { it.endsWith("-$mcVersion") } }
                     ?: versions.getOrNull(versions.indexOf(builtVersion))
                     ?: throw UnknownVersionException(builtVersion)
+                val file = download(indexedVersion)
 
-                call.respondFile(download(indexedVersion), "$builtVersion.jar")
+                call.response.header(
+                    HttpHeaders.ContentDisposition,
+                    ContentDisposition.Attachment
+                        .withParameter(ContentDisposition.Parameters.FileName, file.name)
+                        .toString()
+                )
+                call.respondFile(file)
             }
         }
     }

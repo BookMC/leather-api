@@ -10,6 +10,7 @@ import org.bookmc.exception.UnknownVersionException
 import org.bookmc.plugins.configureRouting
 import org.bookmc.plugins.configureSerialization
 import org.bookmc.responses.GenericResponse
+import java.io.FileNotFoundException
 
 fun main() {
     embeddedServer(
@@ -24,6 +25,13 @@ fun main() {
         install(StatusPages) {
             exception<UnknownVersionException> {
                 call.respond(HttpStatusCode.NotFound, GenericResponse(false, it.message!!))
+            }
+            exception<FileNotFoundException> {
+                call.respond(GenericResponse(false, it.message))
+            }
+
+            status(HttpStatusCode.NotFound) {
+                call.respond(GenericResponse(false, "Unknown path"))
             }
         }
     }.start(wait = true)

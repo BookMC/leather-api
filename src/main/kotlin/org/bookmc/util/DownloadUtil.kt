@@ -10,7 +10,7 @@ private const val MAVEN_LOCATION = "https://maven.bookmc.org/releases/org/bookmc
 suspend fun download(version: String): File {
     val url = MAVEN_LOCATION.format(version, version)
 
-    val file = File("mappings/download/leather-$version.jar").apply {
+    val file = File("./mappings/download/$version.jar").apply {
         parentFile?.mkdirs()
         withContext(Dispatchers.IO) {
             createNewFile()
