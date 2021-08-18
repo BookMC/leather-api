@@ -18,33 +18,45 @@ fun Application.configureRouting() {
 
         // v1
         route("/v1") {
-            get("/versions") {
-                val versions = index("leather")
+            route("/versions") {
+                get {
+                    val versions = index("leather")
+                    call.respond(VersionResponse(true, versions.firstOrNull(), versions))
+                }
 
-                call.respond(VersionResponse(true, versions.firstOrNull(), versions))
-            }
+                get("/{mcversion}") {
+                    val minecraftVersion = call.parameters["mcversion"]!!
 
-            get("/versions/{mcversion}/{version}/download") {
-                val mcVersion = call.parameters["mcversion"]!!
-                val version = call.parameters["version"]!!
+                    val versions = index("leather")
+                        .filter { it.endsWith("-$minecraftVersion") }
+                        .map { it.removeSuffix("-$minecraftVersion") }
 
-                val builtVersion = "$version-$mcVersion"
+                    call.respond(VersionResponse(true, versions.firstOrNull(), versions))
+                }
 
-                val versions = index("leather")
 
-                val indexedVersion = version.takeIf { it == "latest" }
-                    ?.let { versions.firstOrNull { it.endsWith("-$mcVersion") } }
-                    ?: versions.getOrNull(versions.indexOf(builtVersion))
-                    ?: throw UnknownVersionException(builtVersion)
-                val file = download(indexedVersion)
+                get("/{mcversion}/{version}/download") {
+                    val mcVersion = call.parameters["mcversion"]!!
+                    val version = call.parameters["version"]!!
 
-                call.response.header(
-                    HttpHeaders.ContentDisposition,
-                    ContentDisposition.Attachment
-                        .withParameter(ContentDisposition.Parameters.FileName, file.name)
-                        .toString()
-                )
-                call.respondFile(file)
+                    val builtVersion = "$version-$mcVersion"
+
+                    val versions = index("leather")
+
+                    val indexedVersion = version.takeIf { it == "latest" }
+                        ?.let { versions.firstOrNull { it.endsWith("-$mcVersion") } }
+                        ?: versions.getOrNull(versions.indexOf(builtVersion))
+                        ?: throw UnknownVersionException(builtVersion)
+                    val file = download(indexedVersion)
+
+                    call.response.header(
+                        HttpHeaders.ContentDisposition,
+                        ContentDisposition.Attachment
+                            .withParameter(ContentDisposition.Parameters.FileName, file.name)
+                            .toString()
+                    )
+                    call.respondFile(file)
+                }
             }
         }
     }

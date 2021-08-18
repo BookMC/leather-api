@@ -1,15 +1,13 @@
 package org.bookmc.plugins
 
-import io.ktor.gson.*
-import io.ktor.features.*
 import io.ktor.application.*
-import io.ktor.response.*
-import io.ktor.request.*
-import io.ktor.routing.*
+import io.ktor.features.*
+import io.ktor.gson.*
 
 fun Application.configureSerialization() {
     install(ContentNegotiation) {
         gson {
+            serializeNulls()
         }
     }
 }
