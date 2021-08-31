@@ -4,13 +4,16 @@ plugins {
 }
 
 group "org.bookmc"
-version "0.3.1"
+version "0.3.2"
 mainClassName = "org.bookmc.ApplicationKt"
 
 repositories {
     mavenCentral()
     maven {
         url "https://jitpack.io"
+    }
+    maven {
+        url "https://maven.bookmc.org"
     }
 }
 
@@ -31,6 +34,8 @@ dependencies {
         exclude module: "kotlin-stdlib"
         exclude module: "kotlin-stdlib-jdk8"
     }
+
+    implementation "org.bookmc:indexer:0.0.1+build.1"
 }
 
 compileKotlin {
