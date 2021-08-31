@@ -3,6 +3,12 @@ plugins {
     id "org.jetbrains.kotlin.jvm" version "1.5.21"
 }
 
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(16)
+    }
+}
+
 group "org.bookmc"
 version "0.3.2"
 mainClassName = "org.bookmc.ApplicationKt"
