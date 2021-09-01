@@ -2,13 +2,11 @@ package org.bookmc.util
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.bookmc.util.version.data.IndexedArtifact
+import org.bookmc.util.version.data.IndexedArtifacts
 import java.io.File
 import java.net.URL
 
-private const val MAVEN_LOCATION = "https://maven.bookmc.org/releases/org/bookmc/leather/%s/leather-%s.jar"
-
-suspend fun download(version: IndexedArtifact): File {
+suspend fun download(version: IndexedArtifacts.IndexedArtifact): File {
     val file = File("./mappings/download/${version.version}.jar").apply {
         parentFile?.mkdirs()
         withContext(Dispatchers.IO) {

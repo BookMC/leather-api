@@ -10,6 +10,6 @@ fun Route.artifact() {
     get("/versions") {
         val artifact = call.parameters["artifact"]!!
         val versions = index(artifact, call.request.queryParameters["classifier"])
-        call.respond(VersionResponse(true, versions.firstOrNull(), versions))
+        call.respond(VersionResponse(true, versions.latest, versions.artifacts))
     }
 }
