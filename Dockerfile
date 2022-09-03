@@ -1,7 +1,8 @@
 FROM alpine as actions
 ADD ./actions/metadata.tar /src/api/
 
-FROM amd64/openjdk:16
+FROM eclipse-temurin:18.0.2.1_1-jre
 WORKDIR /src/bot
 COPY --from=actions /src/api/metadata-* /src/api
+RUN apt install xargs
 ENTRYPOINT [ "sh", "/src/api/bin/metadata" ]
