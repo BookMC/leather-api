@@ -8,11 +8,14 @@ import java.net.URL
 private const val MAVEN_REPO = "https://maven.bookmc.org/releases"
 
 val indexer = MavenDatabase(URL(MAVEN_REPO))
+val mavenCentralIndexer = MavenDatabase(URL("https://repo1.maven.org/maven2/"))
+
 private var created = false
 
 suspend fun index(artifact: String, classifier: String? = null): IndexedArtifacts {
     if (!created) {
         indexer.create()
+        mavenCentralIndexer.create()
         created = true
     }
 
@@ -28,7 +31,10 @@ suspend fun index(artifact: String, classifier: String? = null): IndexedArtifact
 
     val metadata = indexer.get(key)
 
-    val artifacts = metadata.metadata.versioning.versions.versions.map {
+    val artifacts = listOf(
+        *metadata.metadata.versioning.versions.versions.toTypedArray(),
+        *mavenCentralIndexer.get(key).metadata.versioning.versions.versions.toTypedArray()
+    ).distinct().map {
         IndexedArtifacts.IndexedArtifact(
             it,
             MAVEN_REPO + "/${group}/${artifactName}/$it/$artifactName-$it${classifier?.let { c -> "-$c" } ?: ""}.jar"

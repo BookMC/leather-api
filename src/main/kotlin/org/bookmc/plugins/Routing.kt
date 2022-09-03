@@ -1,13 +1,11 @@
 package org.bookmc.plugins
 
-import io.ktor.application.*
-import io.ktor.response.*
-import io.ktor.routing.*
+import io.ktor.server.application.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
 import org.bookmc.plugins.routes.artifact
 import org.bookmc.plugins.routes.mappings
 import org.bookmc.plugins.routes.responses.GenericResponse
-import org.bookmc.plugins.routes.responses.version.VersionResponse
-import org.bookmc.util.version.index
 
 fun Application.configureRouting() {
     routing {

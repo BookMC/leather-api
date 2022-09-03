@@ -1,9 +1,10 @@
 package org.bookmc.plugins.routes
 
-import io.ktor.application.*
 import io.ktor.http.*
-import io.ktor.response.*
-import io.ktor.routing.*
+import io.ktor.server.application.*
+import io.ktor.server.http.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
 import org.bookmc.plugins.routes.responses.version.VersionResponse
 import org.bookmc.util.download
 import org.bookmc.util.exception.UnknownVersionException

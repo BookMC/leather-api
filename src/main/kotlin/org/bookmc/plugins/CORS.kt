@@ -1,7 +1,7 @@
 package org.bookmc.plugins
 
-import io.ktor.application.*
-import io.ktor.features.*
+import io.ktor.server.application.*
+import io.ktor.server.plugins.cors.routing.*
 
 fun Application.configureCORS() {
     install(CORS) {
